@@ -2,6 +2,8 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <ctime>
+#include <numeric>
 
 using namespace std;
 
@@ -103,18 +105,52 @@ void fun1(vector<int> vec, int & cnt) {
     }
 }
 
-void fun2(vector<int> vec, int sum, int & cnt) {
+void fun2(vector<int> vec, int sum, int left, int & cnt) {
+    auto it = find(vec.begin(), vec.end(), -1);
+    auto pos = distance(vec.begin(), it);
 
+
+    if (pos == vec.size() - 1) {
+        cnt++;
+//        vec[pos] = left;
+//        for (int i : vec) {
+//            cout << i << " ";
+//        }
+//        cout << endl;
+        return;
+    }
+
+    for (int i = left; i > -1; i--) {
+        vec[pos] = i;
+        fun2(vec, sum, left - i, cnt);
+    }
 }
+
+/**
+ * -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+ *      2 -1 -1 -1 -1 -1 -1 -1 -1 -1
+ *          2 0 -1 -1 -1 -1 -1 -1 -1 -1
+ *              2 0 0
+ *              ...
+ *              2 0 0 0 0 0 0 0 0 0 0
+ *      1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+ *          1 1 -1 -1 -1 -1 -1 -1 -1 -1
+ *              ...
+ *          1 0 -1 -1 -1 -1 -1 -1 -1 -1
+ *              1 0 1 0 0 0 0 0 0 0 0 0
+ *              1 0 0 1
+ *
+ *
+ */
 
 int main() {
     auto time_begin = clock();
-    vector<int> vec(21);
+    vector<int> vec(10);
     for (int &i : vec) {
         i = -1;
     }
     int cnt = 0;
-    fun1(vec, cnt);
+    fun2(vec, 21, 21, cnt);
     cout << cnt << endl;
     auto time_end = clock();
 
